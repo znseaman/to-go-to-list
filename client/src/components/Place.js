@@ -1,9 +1,7 @@
 import React from "react";
-import Map from "./Map";
-import { Marker } from "react-map-gl";
-import Pin from "./Pin";
 
-const Place = ({ place }) => {
+const Place = ({ place, children }) => {
+  const { name, description } = place;
   return (
     <div
       style={{
@@ -25,7 +23,7 @@ const Place = ({ place }) => {
           flexDirection: "column"
         }}
       >
-        <h3>{place.name}</h3>
+        <h3>{name}</h3>
         <p
           className="truncate-overflow"
           style={{
@@ -34,18 +32,10 @@ const Place = ({ place }) => {
             position: "relative"
           }}
         >
-          {place.description}
+          {description}
         </p>
       </div>
-      <Map center={[place.longitude, place.latitude]}>
-        <Marker
-          key={place.id}
-          longitude={place.longitude}
-          latitude={place.latitude}
-        >
-          <Pin onClick={() => console.log(`${place.name} was clicked!`)}></Pin>
-        </Marker>
-      </Map>
+      {children}
     </div>
   );
 };

@@ -8,7 +8,7 @@ class Map extends Component {
       height: 150,
       latitude: this.props.center[1],
       longitude: this.props.center[0],
-      zoom: 8
+      zoom: 1
     },
     mounted: false
   };

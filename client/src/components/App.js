@@ -4,9 +4,9 @@ import Places from "./Places";
 
 function App() {
   return (
-    <div>
+    <>
       <Places></Places>
-    </div>
+    </>
   );
 }
 
