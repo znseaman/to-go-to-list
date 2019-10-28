@@ -1,3 +1,36 @@
+html {
+  /* set a line-height variable for multi-line truncation 
+  https://css-tricks.com/multi-line-truncation-with-pure-css/
+  */
+  --lh: 1.4rem;
+  line-height: var(--lh);
+}
+
+/* set overflow to a certain set of lines */
+.truncate-overflow {
+  --max-lines: 3;
+  max-height: calc(var(--lh) * var(--max-lines));
+  overflow: hidden;
+}
+
+/* add ellipsis if over amount of lines */
+.truncate-overflow::before {
+  content: "...";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+/* remove ellipsis if under amount of lines */
+.truncate-overflow::after {
+  content: "";
+  position: absolute;
+  right: 0; /* note: not using bottom */
+  width: 1rem;
+  height: 1rem;
+  background: white;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
