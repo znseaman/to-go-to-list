@@ -4,7 +4,6 @@ import "semantic-ui-css/semantic.min.css";
 
 import "./App.css";
 import PLACES from "../data/places";
-import PlacesContext from "../context/places-context";
 
 import AddPlace from "./AddPlace";
 import Menu from "./Menu";
@@ -16,15 +15,8 @@ function App() {
     <>
       <Menu />
       <Container>
-        <PlacesContext.Provider
-          value={{
-            places,
-            setPlaces
-          }}
-        >
-          <AddPlace></AddPlace>
-          <Places></Places>
-        </PlacesContext.Provider>
+        <AddPlace places={places} setPlaces={setPlaces}></AddPlace>
+        <Places places={places} setPlaces={setPlaces}></Places>
       </Container>
     </>
   );

@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, FormField } from "semantic-ui-react";
 import v4 from "uuid/v4";
 
-import PlacesContext from "../context/places-context";
-
-const AddPlaceForm = () => {
+const AddPlaceForm = ({ places, setPlaces }) => {
   /* @TODO: try using lens & only 1 object for the form in useState */
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -45,69 +43,65 @@ const AddPlaceForm = () => {
   };
 
   return (
-    <PlacesContext.Consumer>
-      {({ places, setPlaces }) => (
-        <Form>
-          <Form.Group widths="equal">
-            <FormField
-              label="Name"
-              control="input"
-              name="name"
-              value={name}
-              onChange={onChange}
-            />
-            <FormField
-              label="Description"
-              control="input"
-              name="description"
-              value={description}
-              onChange={onChange}
-            />
-            <FormField
-              label="Photo Url"
-              control="input"
-              name="photo"
-              value={photo}
-              onChange={onChange}
-            />
-            <FormField
-              label="Latitude"
-              control="input"
-              name="latitude"
-              value={latitude}
-              onChange={onChange}
-            />
-            <FormField
-              label="Longitude"
-              control="input"
-              name="longitude"
-              value={longitude}
-              onChange={onChange}
-            />
-            <Button
-              onClick={e => {
-                e.preventDefault();
-                const hasImage = photo !== "";
-                const newPlace = {
-                  id: v4(),
-                  name,
-                  description,
-                  photo,
-                  hasImage,
-                  latitude: latitude,
-                  longitude: longitude
-                };
-                setPlaces([...places, newPlace]);
-                resetFields();
-              }}
-              primary
-            >
-              Submit
-            </Button>
-          </Form.Group>
-        </Form>
-      )}
-    </PlacesContext.Consumer>
+    <Form>
+      <Form.Group widths="equal">
+        <FormField
+          label="Name"
+          control="input"
+          name="name"
+          value={name}
+          onChange={onChange}
+        />
+        <FormField
+          label="Description"
+          control="input"
+          name="description"
+          value={description}
+          onChange={onChange}
+        />
+        <FormField
+          label="Photo Url"
+          control="input"
+          name="photo"
+          value={photo}
+          onChange={onChange}
+        />
+        <FormField
+          label="Latitude"
+          control="input"
+          name="latitude"
+          value={latitude}
+          onChange={onChange}
+        />
+        <FormField
+          label="Longitude"
+          control="input"
+          name="longitude"
+          value={longitude}
+          onChange={onChange}
+        />
+        <Button
+          onClick={e => {
+            e.preventDefault();
+            const hasImage = photo !== "";
+            const newPlace = {
+              id: v4(),
+              name,
+              description,
+              photo,
+              hasImage,
+              latitude: latitude,
+              longitude: longitude
+            };
+            setPlaces([newPlace, ...places]);
+            resetFields();
+          }}
+          primary
+        >
+          Submit
+        </Button>
+      </Form.Group>
+    </Form>
   );
 };
 
