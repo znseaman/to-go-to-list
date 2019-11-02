@@ -1,22 +1,32 @@
-import React, { useState, createContext } from "react";
+import React, { useState } from "react";
+import { Container } from "semantic-ui-react";
+import "semantic-ui-css/semantic.min.css";
+
 import "./App.css";
-import Places from "./Places";
-import AddPlace from "./AddPlace";
 import PLACES from "../data/places";
 import PlacesContext from "../context/places-context";
+
+import AddPlace from "./AddPlace";
+import Menu from "./Menu";
+import Places from "./Places";
 
 function App() {
   const [places, setPlaces] = useState(PLACES);
   return (
-    <PlacesContext.Provider
-      value={{
-        places,
-        setPlaces
-      }}
-    >
-      <AddPlace></AddPlace>
-      <Places></Places>
-    </PlacesContext.Provider>
+    <>
+      <Menu />
+      <Container>
+        <PlacesContext.Provider
+          value={{
+            places,
+            setPlaces
+          }}
+        >
+          <AddPlace></AddPlace>
+          <Places></Places>
+        </PlacesContext.Provider>
+      </Container>
+    </>
   );
 }
 

@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { Form, Button, FormField } from "semantic-ui-react";
 import v4 from "uuid/v4";
+
 import PlacesContext from "../context/places-context";
 
-const AddPlace = () => {
+const AddPlaceForm = () => {
+  /* @TODO: try using lens & only 1 object for the form in useState */
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
@@ -22,9 +25,11 @@ const AddPlace = () => {
         setPhoto(value);
         break;
       case "latitude":
+        /* @TODO: Add checks if number is actually possible to be a latitude */
         setLatitude(+value);
         break;
       case "longitude":
+        /* @TODO: Add checks if number is actually possible to be a longitude */
         setLongitude(+value);
         break;
     }
@@ -42,63 +47,68 @@ const AddPlace = () => {
   return (
     <PlacesContext.Consumer>
       {({ places, setPlaces }) => (
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            const hasImage = photo !== "";
-            const newPlace = {
-              id: v4(),
-              name,
-              description,
-              photo,
-              hasImage,
-              latitude: latitude,
-              longitude: longitude
-            };
-            setPlaces([...places, newPlace]);
-            resetFields();
-          }}
-        >
-          <label htmlFor="name">
-            Name:
-            <input name="name" type="text" value={name} onChange={onChange} />
-          </label>
-          <label htmlFor="description">
-            Description:
-            <input
+        <Form>
+          <Form.Group widths="equal">
+            <FormField
+              label="Name"
+              control="input"
+              name="name"
+              value={name}
+              onChange={onChange}
+            />
+            <FormField
+              label="Description"
+              control="input"
               name="description"
-              type="text"
               value={description}
               onChange={onChange}
             />
-          </label>
-          <label htmlFor="photo">
-            Photo Url:
-            <input name="photo" type="text" value={photo} onChange={onChange} />
-          </label>
-          <label htmlFor="latitude">
-            Latitude:
-            <input
+            <FormField
+              label="Photo Url"
+              control="input"
+              name="photo"
+              value={photo}
+              onChange={onChange}
+            />
+            <FormField
+              label="Latitude"
+              control="input"
               name="latitude"
-              type="text"
               value={latitude}
               onChange={onChange}
             />
-          </label>
-          <label htmlFor="longitude">
-            Longitude:
-            <input
+            <FormField
+              label="Longitude"
+              control="input"
               name="longitude"
-              type="text"
               value={longitude}
               onChange={onChange}
             />
-          </label>
-          <button type="submit">Submit</button>
-        </form>
+            <Button
+              onClick={e => {
+                e.preventDefault();
+                const hasImage = photo !== "";
+                const newPlace = {
+                  id: v4(),
+                  name,
+                  description,
+                  photo,
+                  hasImage,
+                  latitude: latitude,
+                  longitude: longitude
+                };
+                setPlaces([...places, newPlace]);
+                resetFields();
+              }}
+              primary
+            >
+              Submit
+            </Button>
+          </Form.Group>
+        </Form>
       )}
     </PlacesContext.Consumer>
   );
 };
 
-export default AddPlace;
+export default AddPlaceForm;

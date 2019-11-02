@@ -1,65 +1,79 @@
-import React, { useState } from "react";
-import Place from "./Place";
+import React from "react";
+import { Grid, Image, GridRow, GridColumn } from "semantic-ui-react";
+
 import Map from "./Map";
 import { Marker } from "react-map-gl";
 import Pin from "./Pin";
 import PlacesContext from "../context/places-context";
 
-const Places = () => {
+const PlacesGrid = () => {
   return (
     <PlacesContext.Consumer>
       {({ places, setPlaces }) => (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column"
-          }}
-        >
+        <Grid celled>
           {places.map(place => (
-            <Place key={place.id} place={place}>
-              {place.hasImage ? (
-                <img
-                  src={place.photo}
-                  alt=""
-                  style={{ width: 200, height: 150 }}
-                  onClick={() => {
-                    const updatedPlaces = places.map(p => {
-                      if (p.id === place.id) {
-                        p.hasImage = !p.hasImage;
-                      }
-                      return p;
-                    });
-                    debugger;
-                    setPlaces(updatedPlaces);
-                  }}
-                />
-              ) : (
-                <Map center={[place.longitude, place.latitude]}>
-                  <Marker
-                    key={place.id}
-                    longitude={place.longitude}
-                    latitude={place.latitude}
+            <GridRow>
+              <GridColumn width={6}>
+                {place.hasImage ? (
+                  <Image
+                    src={place.photo}
+                    alt=""
+                    onClick={() => {
+                      const updatedPlaces = places.map(p => {
+                        if (p.id === place.id) {
+                          p.hasImage = !p.hasImage;
+                        }
+                        return p;
+                      });
+                      setPlaces(updatedPlaces);
+                    }}
+                  />
+                ) : (
+                  <Map
+                    width="auto"
+                    height={120}
+                    center={[place.longitude, place.latitude]}
+                    zoom={1}
                   >
-                    <Pin
-                      onClick={() => {
-                        const updatedPlaces = places.map(p => {
-                          if (p.id === place.id) {
-                            p.hasImage = !p.hasImage;
-                          }
-                          return p;
-                        });
-                        setPlaces(updatedPlaces);
-                      }}
-                    ></Pin>
-                  </Marker>
-                </Map>
-              )}
-            </Place>
+                    <Marker
+                      key={place.id}
+                      longitude={place.longitude}
+                      latitude={place.latitude}
+                    >
+                      <Pin
+                        onClick={() => {
+                          const updatedPlaces = places.map(p => {
+                            if (p.id === place.id) {
+                              p.hasImage = !p.hasImage;
+                            }
+                            return p;
+                          });
+                          setPlaces(updatedPlaces);
+                        }}
+                      ></Pin>
+                    </Marker>
+                  </Map>
+                )}
+              </GridColumn>
+              <GridColumn width={10}>
+                <h3>{place.name}</h3>
+                <p
+                  className="truncate-overflow"
+                  style={{
+                    // allow for appending "..." for text overflow
+                    position: "relative",
+                    paddingRight: "15px"
+                  }}
+                >
+                  {place.description}
+                </p>
+              </GridColumn>
+            </GridRow>
           ))}
-        </div>
+        </Grid>
       )}
     </PlacesContext.Consumer>
   );
 };
 
-export default Places;
+export default PlacesGrid;

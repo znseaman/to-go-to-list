@@ -8,6 +8,7 @@ html {
 
 /* set overflow to a certain set of lines */
 .truncate-overflow {
+  /* @TODO: set this to be dynamic based on the container */
   --max-lines: 3;
   max-height: calc(var(--lh) * var(--max-lines));
   overflow: hidden;
