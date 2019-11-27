@@ -34,7 +34,7 @@ export default () => (
         </Form>
       </Segment>
       <Message>
-        Already registered? <a href="/login">Login</a>
+        Already registered? <a href="/signin">Sign In</a>
       </Message>
     </Grid.Column>
   </Grid>
