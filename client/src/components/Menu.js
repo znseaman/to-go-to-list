@@ -1,13 +1,14 @@
 import React from "react";
 import { Container, Image, Menu, MenuItem } from "semantic-ui-react";
+import { Link, withRouter } from "react-router-dom";
 import { faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function MenuComponent() {
+function MenuComponent() {
   return (
     <Menu>
       <Container>
-        <MenuItem as="a" header>
+        <MenuItem as={Link} to={'/'} header>
           <FontAwesomeIcon icon={faGlobeAmericas} size="5x"></FontAwesomeIcon>
         </MenuItem>
 
@@ -16,12 +17,12 @@ export default function MenuComponent() {
         </MenuItem>
 
         <Menu.Menu position="right">
-          <MenuItem as="a" name="login">
-            Login
+          <MenuItem as={Link} to={'/signin'}>
+            Sign In
           </MenuItem>
 
-          <MenuItem as="a" name="register">
-            Register
+          <MenuItem as={Link} to={'/create_account'}>
+            Create Account
           </MenuItem>
           <MenuItem as="a" header>
             <Image
@@ -36,3 +37,5 @@ export default function MenuComponent() {
     </Menu>
   );
 }
+
+export default withRouter(MenuComponent);

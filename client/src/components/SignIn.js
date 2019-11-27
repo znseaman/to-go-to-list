@@ -12,7 +12,7 @@ export default () => (
   <Grid centered columns={2}>
     <Grid.Column>
       <Header as="h2" textAlign="center">
-        Login
+        Sign In
       </Header>
       <Segment>
         <Form size="large">
@@ -29,12 +29,12 @@ export default () => (
             placeholder="Password"
           ></Form.Input>
           <Button color="blue" fluid size="large">
-            Login
+            Sign In
           </Button>
         </Form>
       </Segment>
       <Message>
-        Not registered yet? <a href="#">Sign Up</a>
+        Not registered yet? <a href="/create_account">Create Account</a>
       </Message>
     </Grid.Column>
   </Grid>

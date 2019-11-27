@@ -19,7 +19,7 @@ const Places = ({ places, setPlaces }) => {
   return (
     <Grid celled>
       {places.map(place => (
-        <GridRow>
+        <GridRow key={place.id}>
           <GridColumn width={6}>
             {place.hasImage ? (
               <Image
@@ -28,21 +28,21 @@ const Places = ({ places, setPlaces }) => {
                 onClick={() => onClick(place.id)}
               />
             ) : (
-              <Map
-                width="auto"
-                height={120}
-                center={[place.longitude, place.latitude]}
-                zoom={1}
-              >
-                <Marker
-                  key={place.id}
-                  longitude={place.longitude}
-                  latitude={place.latitude}
+                <Map
+                  width="auto"
+                  height={120}
+                  center={[place.longitude, place.latitude]}
+                  zoom={1}
                 >
-                  <Pin onClick={() => onClick(place.id)}></Pin>
-                </Marker>
-              </Map>
-            )}
+                  <Marker
+                    key={place.id}
+                    longitude={place.longitude}
+                    latitude={place.latitude}
+                  >
+                    <Pin onClick={() => onClick(place.id)}></Pin>
+                  </Marker>
+                </Map>
+              )}
           </GridColumn>
           <GridColumn width={10}>
             <h3>{place.name}</h3>
