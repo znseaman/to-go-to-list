@@ -7,8 +7,8 @@ import "./App.css";
 
 import Menu from "./Menu";
 import Home from "./Home";
-import SignIn from "./SignIn";
-import CreateAccount from "./CreateAccount";
+import AuthForm from "./AuthForm";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   return (
@@ -16,9 +16,9 @@ function App() {
       <Menu />
       <Container>
         <Switch>
-          <Route path="/" exact component={Home}></Route>
-          <Route path="/signin" component={SignIn}></Route>
-          <Route path="/create_account" component={CreateAccount}></Route>
+          <PrivateRoute path="/" exact component={Home} />
+          <Route path="/signin" component={AuthForm} />
+          <Route path="/create_account" component={AuthForm} />
         </Switch>
       </Container>
     </Router>

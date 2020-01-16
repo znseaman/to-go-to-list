@@ -3,3 +3,9 @@ node_modules/
 
 # Build directory
 dist/
+
+# Environment variables
+.env
+
+# Secrets files
+*.secrets.js

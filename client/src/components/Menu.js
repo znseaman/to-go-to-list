@@ -1,8 +1,9 @@
 import React from "react";
 import { Container, Image, Menu, MenuItem } from "semantic-ui-react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 import { faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { client } from "../Client";
 
 function MenuComponent() {
   return (
@@ -17,21 +18,33 @@ function MenuComponent() {
         </MenuItem>
 
         <Menu.Menu position="right">
-          <MenuItem as={Link} to={'/signin'}>
-            Sign In
+          {
+            !client.isSignedIn() && <MenuItem as={Link} to={'/signin'}>
+              Sign In
           </MenuItem>
-
-          <MenuItem as={Link} to={'/create_account'}>
-            Create Account
+          }
+          {
+            !client.isSignedIn() && <MenuItem as={Link} to={'/create_account'}>
+              Create Account
           </MenuItem>
-          <MenuItem as="a" header>
+          }
+          {client.isSignedIn() && <MenuItem as={Link} to={'/settings'}>
+            Settings
+          </MenuItem>}
+          {client.isSignedIn() && <MenuItem as={Link} to={'/'} onClick={() => {
+            client.signOut();
+            return <Redirect to="/" />;
+          }}>
+            Sign Out
+          </MenuItem>}
+          {/* {client.isSignedIn() && <MenuItem as="a" header>
             <Image
               src="https://media.licdn.com/dms/image/C4E03AQF1a3nJPjpMow/profile-displayphoto-shrink_100_100/0?e=1577923200&v=beta&t=mYeQh7WmLGu7m9YRtYHKi6nzaTF-F_c7B-1MsWZE8-c"
               width="68"
               height="68"
               circular
             />
-          </MenuItem>
+          </MenuItem>} */}
         </Menu.Menu>
       </Container>
     </Menu>

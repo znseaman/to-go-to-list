@@ -6,6 +6,10 @@ const baseConfig = {
   isDev: env == 'development',
   isText: env === 'testing',
   port: 3000,
+  secrets: {
+    jwt: process.env.JWT_SECRET,
+    jwtExp: '10s'
+  }
 }
 
 let envConfig = {}
@@ -16,7 +20,7 @@ switch (env) {
     envConfig = require('./dev').config
     break;
   case 'test':
-  case 'texting':
+  case 'testing':
     envConfig = require('./testing').config
     break;
   default:
