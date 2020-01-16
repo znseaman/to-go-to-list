@@ -6,9 +6,10 @@ import {
   Grid,
   Header,
   Message,
-  Segment
+  Segment,
+  Loader
 } from "semantic-ui-react";
-import { client } from "../Client"
+import { client } from "../Client";
 
 const CreateAccount = () => {
   const initialState = {
@@ -17,6 +18,8 @@ const CreateAccount = () => {
     confirmPassword: '',
     loginInProgress: false,
     shouldRedirect: false,
+    hasError: false,
+    errorMessage: ''
   };
   const [data, setData] = React.useState(initialState);
 
@@ -34,8 +37,15 @@ const CreateAccount = () => {
     // TODO: validate fields
 
     try {
-      await submit({ email, password });
-      setData({ ...data, shouldRedirect: true });
+      await submit({ email, password })
+        .then(res => {
+          setData({ ...data, shouldRedirect: true });
+        })
+        .catch(err => {
+          if (err.response.status == 401) {
+            setData({ ...data, hasError: true, errorMessage: 'Invalid Credentials', loginInProgress: false });
+          }
+        });
     } catch (error) {
       console.error(error);
     }
@@ -83,11 +93,16 @@ const CreateAccount = () => {
               onChange={handleChange}
             ></Form.Input>
           }
-          <Button color="blue" fluid size="large">
+          {data.loginInProgress ? <Loader active inline='centered' /> : <Button color="blue" fluid size="large">
             {hasAccount ? SIGN : CREATE}
-          </Button>
+          </Button>}
         </Form>
       </Segment>
+      {data.hasError &&
+        <Segment inverted color='red'>
+          {data.errorMessage}
+        </Segment>
+      }
       <Message>
         {hasAccount ? 'Not registered yet?' : 'Already registered?'}{' '}
         <Link to={hasAccount ? createAccountRoute : signInRoute}>
@@ -95,7 +110,7 @@ const CreateAccount = () => {
         </Link>
       </Message>
     </Grid.Column>
-  </Grid>
+  </Grid >
 }
 
 export default CreateAccount;
