@@ -28,9 +28,9 @@ function MenuComponent() {
               Create Account
           </MenuItem>
           }
-          {client.isSignedIn() && <MenuItem as={Link} to={'/settings'}>
+          {/* {client.isSignedIn() && <MenuItem as={Link} to={'/settings'}>
             Settings
-          </MenuItem>}
+          </MenuItem>} */}
           {client.isSignedIn() && <MenuItem as={Link} to={'/'} onClick={() => {
             client.signOut();
             return <Redirect to="/" />;
