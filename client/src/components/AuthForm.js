@@ -37,7 +37,8 @@ const AuthForm = () => {
   const signInRoute = "/signin";
   const createAccountRoute = "/create_account";
   const hasAccount = useRouteMatch(signInRoute);
-  const submit = hasAccount ? client.signIn.bind(client) : client.createAccount.bind(client);
+  const authRoute = hasAccount ? signInRoute : createAccountRoute;
+  const submit = client.authenticate.bind(client, authRoute);
   const CREATE = 'Create Account';
   const SIGN = 'Sign In';
 

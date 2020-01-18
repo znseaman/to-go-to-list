@@ -59,8 +59,9 @@ export const protect = async (req, res, next) => {
   }
 }
 
-export const sendToken = (req, res) => {
+export const sendToken = async (req, res) => {
   const { user } = req;
   const token = user.newToken(user);
-  return res.status(201).send({ token, user });
+  const payload = await User.verifyToken(token);
+  return res.status(201).send({ token, user, expiresIn: payload.exp });
 }

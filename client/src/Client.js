@@ -4,15 +4,19 @@ class Client {
   constructor() {
     this.user = sessionStorage.getItem('user');
     this.token = sessionStorage.getItem('token');
+    this.expiresIn = sessionStorage.getItem('expiresIn');
 
     if (this.token) {
       this.isTokenValid().catch(err => {
         if (err.response.status == 401) {
-          this.removeToken();
-          this.removeUser();
-          window.location.reload();
+          this.signOut();
+          this.reloadPage();
         }
       });
+    }
+
+    if (this.expiresIn) {
+      this.setAutoLogout();
     }
   }
 
@@ -20,57 +24,53 @@ class Client {
     return !!this.token;
   }
 
-  setToken(token) {
-    this.token = token;
-
-    sessionStorage.setItem('token', token);
+  setItem(key, value) {
+    this[key] = value;
+    sessionStorage.setItem(key, value);
   }
 
-  removeToken() {
-    this.token = null;
-
-    sessionStorage.removeItem('token');
+  removeItem(key) {
+    this[key] = sessionStorage.removeItem(key);
   }
 
-  setUser(user) {
-    this.user = user;
-
-    sessionStorage.setItem('user', JSON.stringify(user));
-  }
-
-  removeUser() {
-    this.user = null;
-
-    sessionStorage.removeItem('user');
-  }
-
-  createAccount({ email, password }) {
-    return axios.post('http://localhost:3000/create_account', { email, password })
+  authenticate = (route, { email, password }) => (
+    axios.post(`http://localhost:3000${route}`, { email, password })
       .then(res => res.data)
-      .then(({ user, token }) => {
-        this.setUser(user);
-        this.setToken(token);
-      });
-  }
-
-  signIn({ email, password }) {
-    return axios.post('http://localhost:3000/signin', { email, password })
-      .then(res => res.data)
-      .then(({ user, token }) => {
-        this.setUser(user);
-        this.setToken(token);
-      });
-  }
+      .then(({ user, token, expiresIn }) => {
+        this.setItem('user', user);
+        this.setItem('token', token);
+        this.setItem('expiresIn', expiresIn);
+        this.setAutoLogout();
+      })
+  )
 
   signOut() {
-    this.removeToken();
-    this.removeUser();
+    this.removeItems(['token', 'user', 'expiresIn']);
   }
 
   isTokenValid() {
     return axios.get('http://localhost:3000/api/user', {
       headers: { 'Authorization': `Bearer ${this.token}` }
     });
+  }
+
+  removeItems(items) {
+    for (let item of items) {
+      this.removeItem(item);
+    }
+  }
+
+  reloadPage() {
+    window.location.reload();
+  }
+
+  setAutoLogout() {
+    // convert expiresIn seconds to milliseconds
+    const timeLeft = (Number(this.expiresIn) * 1000) - Date.now();
+    setTimeout(() => {
+      this.signOut();
+      this.reloadPage();
+    }, timeLeft)
   }
 }
 
