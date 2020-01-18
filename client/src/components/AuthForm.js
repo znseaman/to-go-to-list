@@ -7,21 +7,32 @@ import {
   Header,
   Message,
   Segment,
-  Loader
+  Loader,
+  Label,
+  Input,
+  Reveal
 } from "semantic-ui-react";
 import { client } from "../Client";
+import { checkValidity } from "../shared/utility";
 
-const CreateAccount = () => {
-  const initialState = {
-    email: '',
-    password: '',
-    confirmPassword: '',
+const AuthForm = () => {
+  const [formState, setFormState] = React.useState({
     loginInProgress: false,
     shouldRedirect: false,
     hasError: false,
-    errorMessage: ''
+    errorMessage: '',
+  });
+  const initialData = {
+    email: '',
+    password: '',
+    confirmPassword: '',
   };
-  const [data, setData] = React.useState(initialState);
+  const [data, setData] = React.useState(initialData);
+
+  const [emailLabel, setEmailLabel] = React.useState('hidden');
+  const [emailValid, setEmailValid] = React.useState(false);
+  const [confirmLabel, setConfirmLabel] = React.useState('hidden');
+  const [confirmValid, setConfirmValid] = React.useState(false);
 
   const signInRoute = "/signin";
   const createAccountRoute = "/create_account";
@@ -32,18 +43,32 @@ const CreateAccount = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setData({ ...data, loginInProgress: true });
+    setFormState({ ...formState, loginInProgress: true });
     const { email, password, confirmPassword } = data;
-    // TODO: validate fields
+
+    // basic login validation
+    if (!hasAccount) {
+      // create account validation
+      if (password.length < 0 || confirmPassword.length < 0 || password != confirmPassword || email.length < 0) {
+        setFormState({ ...formState, loginInProgress: false });
+        return false;
+      }
+    } else if (hasAccount) {
+      // sign in validation
+      if (email.length < 0 && password.length < 0) {
+        setFormState({ ...formState, loginInProgress: false });
+        return false;
+      }
+    }
 
     try {
       await submit({ email, password })
         .then(res => {
-          setData({ ...data, shouldRedirect: true });
+          setFormState({ ...formState, shouldRedirect: true });
         })
         .catch(err => {
           if (err.response.status == 401) {
-            setData({ ...data, hasError: true, errorMessage: 'Invalid Credentials', loginInProgress: false });
+            setFormState({ ...formState, loginInProgress: false, hasError: true, errorMessage: 'Invalid Credentials' });
           }
         });
     } catch (error) {
@@ -53,7 +78,21 @@ const CreateAccount = () => {
 
   const handleChange = e => setData({ ...data, [e.target.name]: e.target.value });
 
-  if (data.shouldRedirect) {
+  const handleBlur = e => {
+    const { name: field, value } = e.target;
+    if (field == 'email') {
+      const valid = checkValidity(value, { required: true, valid: false, isEmail: true });
+      setEmailLabel(valid ? 'hidden' : '');
+      setEmailValid(valid);
+    } else if (field == 'confirmPassword') {
+      const { password, confirmPassword } = data;
+      const match = password == confirmPassword;
+      setConfirmLabel(match ? 'hidden' : '');
+      setConfirmValid(match);
+    }
+  }
+
+  if (formState.shouldRedirect) {
     return <Redirect to="/" />;
   }
 
@@ -64,43 +103,66 @@ const CreateAccount = () => {
       </Header>
       <Segment>
         <Form size="large" onSubmit={handleSubmit}>
-          <Form.Input
-            fluid
-            icon="user"
-            iconPosition="left"
-            placeholder="Email address"
-            name="email"
-            onChange={handleChange}
-          ></Form.Input>
-          <Form.Input
-            fluid
-            icon="lock"
-            iconPosition="left"
-            placeholder="Password"
-            type="password"
-            name="password"
-            onChange={handleChange}
-          ></Form.Input>
-          {
-            !hasAccount &&
-            <Form.Input
+          <Form.Field>
+            <Input
+              fluid
+              icon="at"
+              color="red"
+              iconPosition="left"
+              placeholder="Email address"
+              name="email"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required
+              error={emailValid}
+            ></Input>
+            <Label pointing prompt className={emailLabel}>
+              Please enter a valid email
+            </Label>
+          </Form.Field>
+          <Form.Field>
+            <Input
               fluid
               icon="lock"
               iconPosition="left"
-              placeholder="Confirm Password"
+              placeholder="Password"
               type="password"
-              name="confirmPassword"
+              name="password"
               onChange={handleChange}
-            ></Form.Input>
+              required
+            ></Input>
+            <Label pointing prompt className="hidden">
+              Please enter a value
+            </Label>
+          </Form.Field>
+          {
+            !hasAccount &&
+            <Form.Field>
+              <Input
+                fluid
+                icon="lock"
+                iconPosition="left"
+                placeholder="Confirm Password"
+                type="password"
+                name="confirmPassword"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                required
+                error={confirmValid}
+              ></Input>
+              <Label pointing prompt className={confirmLabel}>
+                Please enter matching passwords
+              </Label>
+            </Form.Field>
           }
-          {data.loginInProgress ? <Loader active inline='centered' /> : <Button color="blue" fluid size="large">
+          {formState.loginInProgress ? <Loader active inline='centered' /> : <Button color="blue" fluid size="large">
             {hasAccount ? SIGN : CREATE}
           </Button>}
         </Form>
       </Segment>
-      {data.hasError &&
+      {formState.hasError &&
         <Segment inverted color='red'>
-          {data.errorMessage}
+          {formState.errorMessage}
         </Segment>
       }
       <Message>
@@ -113,4 +175,4 @@ const CreateAccount = () => {
   </Grid >
 }
 
-export default CreateAccount;
+export default AuthForm;
