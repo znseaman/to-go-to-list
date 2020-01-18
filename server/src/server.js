@@ -3,7 +3,7 @@ import config from './config';
 import cors from 'cors';
 import morgan from 'morgan';
 import sequelize from './utils/db'
-import { protect, createAccount, signIn } from './utils/auth';
+import { protect, createAccount, signIn, sendToken } from './utils/auth';
 import Place from './resources/place/place.model';
 import User from './resources/user/user.model';
 import secrets from './resources/user/user.secrets';
@@ -19,11 +19,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.post('/create_account', createAccount);
-app.post('/signin', signIn);
-app.use('/api', protect);
-app.use('/api/user', userRouter);
-app.use('/api/place', placeRouter);
+app.post('/create_account', createAccount, sendToken);
+app.post('/signin', signIn, sendToken);
+app.use('/api/user', protect, userRouter);
+app.use('/api/place', protect, placeRouter);
 
 
 export const start = async () => {

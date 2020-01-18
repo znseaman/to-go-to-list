@@ -69,6 +69,8 @@ const AuthForm = () => {
         .catch(err => {
           if (err.response.status == 401) {
             setFormState({ ...formState, loginInProgress: false, hasError: true, errorMessage: 'Invalid Credentials' });
+          } else if (err.response.status == 500) {
+            setFormState({ ...formState, loginInProgress: false, hasError: true, errorMessage: 'Internal Server Error' });
           }
         });
     } catch (error) {

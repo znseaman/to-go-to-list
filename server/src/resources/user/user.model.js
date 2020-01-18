@@ -1,7 +1,8 @@
 import Sequelize from 'sequelize';
-
 import sequelize from '../../utils/db';
 import secrets from './user.secrets';
+import bcrypt from 'bcrypt';
+import { newToken, verifyToken, getTokenFromRequest } from '../../utils/token';
 
 const User = sequelize.define('user', {
   id: {
@@ -12,8 +13,16 @@ const User = sequelize.define('user', {
   },
   email: Sequelize.STRING,
   password: Sequelize.STRING
+}, {
+  hooks: {
+    beforeCreate: async (user, options) => {
+      // eslint-disable-next-line require-atomic-updates
+      user.password = await bcrypt.hash(user.password, 10);
+    }
+  }
 });
 
+/* Instance Methods */
 User.prototype.toJSON = function () {
   var values = Object.assign({}, this.get());
 
@@ -22,6 +31,22 @@ User.prototype.toJSON = function () {
   delete values.updatedAt;
   return values;
 }
+
+User.prototype.checkPassword = async function (password) {
+  return new Promise(async (resolve, reject) => {
+    const match = await bcrypt.compare(password, this.password).catch(reject);
+    if (!match) {
+      reject('not auth');
+    }
+    resolve();
+  });
+}
+
+User.prototype.newToken = newToken;
+
+/* Static Methods */
+User.verifyToken = verifyToken;
+User.getTokenFromRequest = getTokenFromRequest;
 
 // User.sync({ force: true }).then(async () => {
 //   console.log('In User.sync ....')
