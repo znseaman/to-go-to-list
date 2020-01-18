@@ -1,5 +1,3 @@
-import config from '../config';
-import jwt from 'jsonwebtoken';
 import User from '../resources/user/user.model';
 
 export const createAccount = async (req, res, next) => {
