@@ -10,7 +10,6 @@ import {
   Loader,
   Label,
   Input,
-  Reveal
 } from "semantic-ui-react";
 import { client } from "../Client";
 import { checkValidity } from "../shared/utility";
