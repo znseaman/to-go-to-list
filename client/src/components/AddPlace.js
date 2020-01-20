@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Form, Button, FormField } from "semantic-ui-react";
-import v4 from "uuid/v4";
+import axios from "axios";
 
-const AddPlaceForm = ({ places, setPlaces }) => {
+const AddPlaceForm = ({ places, setPlaces, token }) => {
   /* @TODO: try using lens & only 1 object for the form in useState */
   const initialFormData = {
     name: "",
@@ -37,12 +37,16 @@ const AddPlaceForm = ({ places, setPlaces }) => {
     e.preventDefault();
     const hasImage = formData["photo"] !== "";
     const newPlace = {
-      id: v4(),
       hasImage,
       ...formData
     };
-    setPlaces([newPlace, ...places]);
-    setFormData(initialFormData);
+
+    return axios.post(`http://localhost:3000/api/place`, newPlace, { headers: { 'Authorization': `Bearer ${token}` } })
+      .then(res => res.data)
+      .then(({ data: place }) => {
+        setPlaces([place, ...places]);
+        setFormData(initialFormData);
+      })
   };
 
   return (

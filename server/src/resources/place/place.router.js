@@ -9,9 +9,15 @@ router
   .get(controllers.getOne)
   .post(controllers.createOne)
 
+// /api/place/all
+router
+  .route('/all')
+  .get(controllers.getMany)
+
 // /api/place/:id
 router
-  .route('/:id')
+  .route('/:id(\\d+)/')
   .get(controllers.getOne)
+  .delete(controllers.removeOne)
 
 export default router;

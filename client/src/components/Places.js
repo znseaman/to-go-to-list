@@ -1,11 +1,11 @@
 import React from "react";
-import { Grid, Image, GridRow, GridColumn } from "semantic-ui-react";
-
+import { Grid, Icon, Image, GridRow, GridColumn, Button } from "semantic-ui-react";
+import axios from "axios";
 import Map from "./Map";
 import { Marker } from "react-map-gl";
 import Pin from "./Pin";
 
-const Places = ({ places, setPlaces }) => {
+const Places = ({ places, setPlaces, token }) => {
   const onClick = id => {
     const updatedPlaces = places.map(p => {
       if (p.id === id) {
@@ -16,9 +16,17 @@ const Places = ({ places, setPlaces }) => {
     setPlaces(updatedPlaces);
   };
 
+  const handleDelete = id => {
+    return axios.delete(`http://localhost:3000/api/place/${id}`, { headers: { 'Authorization': `Bearer ${token}` } })
+      .then(res => res.data)
+      .then(({ data: id }) => {
+        setPlaces(places.filter(p => p.id != id));
+      });
+  }
+
   return (
     <Grid celled>
-      {places.map(place => (
+      {places.length > 0 && places.map(place => (
         <GridRow key={place.id}>
           <GridColumn width={6}>
             {place.hasImage ? (
@@ -56,6 +64,7 @@ const Places = ({ places, setPlaces }) => {
             >
               {place.description}
             </p>
+            <Button negative onClick={() => handleDelete(place.id)}><Icon name='trash' />Delete</Button>
           </GridColumn>
         </GridRow>
       ))}
