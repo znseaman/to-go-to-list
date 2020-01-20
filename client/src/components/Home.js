@@ -1,6 +1,4 @@
 import React from "react";
-import axios from "axios";
-import PLACES from "../data/places";
 import AddPlace from "./AddPlace";
 import Places from "./Places";
 import { client } from "../Client";
@@ -10,9 +8,7 @@ const Home = () => {
   const [token] = React.useState(client.token);
 
   React.useEffect(() => {
-    axios.get('http://localhost:3000/api/place/all', {
-      headers: { 'Authorization': `Bearer ${token}` }
-    }).then(res => res.data)
+    client.getPlaces()
       .then(({ data }) => {
         setPlaces(data)
       })
@@ -20,7 +16,7 @@ const Home = () => {
         console.error(err);
         setPlaces([]);
       });
-  }, [token])
+  }, []);
 
   return (
     <>

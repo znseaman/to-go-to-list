@@ -72,6 +72,12 @@ class Client {
       this.reloadPage();
     }, timeLeft)
   }
+
+  getPlaces() {
+    return axios.get('http://localhost:3000/api/place/all', {
+      headers: { 'Authorization': `Bearer ${this.token}` }
+    }).then(res => res.data);
+  }
 }
 
 export const client = new Client();
