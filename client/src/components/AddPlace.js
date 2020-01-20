@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Form, Button, FormField } from "semantic-ui-react";
-import axios from "axios";
+import { client } from "../Client";
 
-const AddPlaceForm = ({ places, setPlaces, token }) => {
+const AddPlaceForm = ({ places, setPlaces }) => {
   /* @TODO: try using lens & only 1 object for the form in useState */
   const initialFormData = {
     name: "",
@@ -41,8 +41,7 @@ const AddPlaceForm = ({ places, setPlaces, token }) => {
       ...formData
     };
 
-    return axios.post(`http://localhost:3000/api/place`, newPlace, { headers: { 'Authorization': `Bearer ${token}` } })
-      .then(res => res.data)
+    return client.createPlace(newPlace)
       .then(({ data: place }) => {
         setPlaces([place, ...places]);
         setFormData(initialFormData);

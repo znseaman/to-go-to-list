@@ -20,7 +20,7 @@ const Home = () => {
 
   return (
     <>
-      <AddPlace places={places} setPlaces={setPlaces} token={token}></AddPlace>
+      <AddPlace places={places} setPlaces={setPlaces}></AddPlace>
       <Places places={places} setPlaces={setPlaces} token={token}></Places>
     </>
   );
