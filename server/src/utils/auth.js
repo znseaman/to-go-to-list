@@ -3,7 +3,13 @@ import User from '../resources/user/user.model';
 export const createAccount = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).send({ message: 'requires email and password' });
+    return res.status(400).send({ message: 'Requires email and password' });
+  }
+
+  // user already exists
+  const user = await User.findOne({ where: { email } });
+  if (user) {
+    return res.status(400).send({ message: 'User already exists with that email' })
   }
 
   try {

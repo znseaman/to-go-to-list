@@ -67,8 +67,8 @@ const AuthForm = () => {
           setFormState({ ...formState, shouldRedirect: true });
         })
         .catch(err => {
-          if (err.response.status == 401) {
-            setFormState({ ...formState, loginInProgress: false, hasError: true, errorMessage: 'Invalid Credentials' });
+          if (err.response.status >= 400 && err.response.status < 500) {
+            setFormState({ ...formState, loginInProgress: false, hasError: true, errorMessage: err.response.data.message });
           } else if (err.response.status == 500) {
             setFormState({ ...formState, loginInProgress: false, hasError: true, errorMessage: 'Internal Server Error' });
           }
