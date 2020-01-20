@@ -6,15 +6,6 @@ class Client {
     this.token = sessionStorage.getItem('token');
     this.expiresIn = sessionStorage.getItem('expiresIn');
 
-    if (this.token) {
-      this.isTokenValid().catch(err => {
-        if (err.response.status == 401) {
-          this.signOut();
-          this.reloadPage();
-        }
-      });
-    }
-
     if (this.expiresIn) {
       this.setAutoLogout();
     }
@@ -46,12 +37,6 @@ class Client {
 
   signOut() {
     this.removeItems(['token', 'user', 'expiresIn']);
-  }
-
-  isTokenValid() {
-    return axios.get('http://localhost:3000/api/user', {
-      headers: { 'Authorization': `Bearer ${this.token}` }
-    });
   }
 
   removeItems(items) {
