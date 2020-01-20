@@ -77,6 +77,11 @@ class Client {
     return axios.post(`http://localhost:3000/api/place`, body, { headers: { 'Authorization': `Bearer ${this.token}` } }).then(res => res.data)
   }
 
+  deletePlace(id) {
+    return axios.delete(`http://localhost:3000/api/place/${id}`, { headers: { 'Authorization': `Bearer ${this.token}` } })
+      .then(res => res.data)
+  }
+
   getPlaces() {
     return axios.get('http://localhost:3000/api/place/all', {
       headers: { 'Authorization': `Bearer ${this.token}` }

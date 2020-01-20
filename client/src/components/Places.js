@@ -1,11 +1,11 @@
 import React from "react";
 import { Grid, Icon, Image, GridRow, GridColumn, Button } from "semantic-ui-react";
-import axios from "axios";
 import Map from "./Map";
 import { Marker } from "react-map-gl";
 import Pin from "./Pin";
+import { client } from "../Client";
 
-const Places = ({ places, setPlaces, token }) => {
+const Places = ({ places, setPlaces }) => {
   const onClick = id => {
     const updatedPlaces = places.map(p => {
       if (p.id === id) {
@@ -17,8 +17,7 @@ const Places = ({ places, setPlaces, token }) => {
   };
 
   const handleDelete = id => {
-    return axios.delete(`http://localhost:3000/api/place/${id}`, { headers: { 'Authorization': `Bearer ${token}` } })
-      .then(res => res.data)
+    return client.deletePlace(id)
       .then(({ data: id }) => {
         setPlaces(places.filter(p => p.id != id));
       });

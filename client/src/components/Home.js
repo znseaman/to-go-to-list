@@ -5,7 +5,6 @@ import { client } from "../Client";
 
 const Home = () => {
   const [places, setPlaces] = React.useState([]);
-  const [token] = React.useState(client.token);
 
   React.useEffect(() => {
     client.getPlaces()
@@ -20,8 +19,8 @@ const Home = () => {
 
   return (
     <>
-      <AddPlace places={places} setPlaces={setPlaces}></AddPlace>
-      <Places places={places} setPlaces={setPlaces} token={token}></Places>
+      <AddPlace places={places} setPlaces={setPlaces} />
+      <Places places={places} setPlaces={setPlaces} />
     </>
   );
 };
