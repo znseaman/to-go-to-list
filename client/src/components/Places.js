@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Icon, Image, GridRow, GridColumn, Button } from "semantic-ui-react";
 import Map from "./Map";
-import { Marker } from "react-map-gl";
+import { Popup, Marker } from "react-map-gl";
 import Pin from "./Pin";
 import { client } from "../Client";
 
@@ -23,6 +23,20 @@ const Places = ({ places, setPlaces }) => {
       });
   }
 
+  const handleImgLoad = ({ target: img }, id) => {
+    // add to places.dimensions = {height: img.offsetHeight, width: img.offsetWidth}
+    const updatedPlaces = places.map(p => {
+      if (p.id == id) {
+        p.dimensions = {
+          height: img.offsetHeight,
+          width: img.offsetWidth
+        }
+      }
+      return p;
+    })
+    setPlaces(updatedPlaces);
+  }
+
   return (
     <Grid celled>
       {places.length > 0 && places.map(place => (
@@ -31,13 +45,16 @@ const Places = ({ places, setPlaces }) => {
             {place.hasImage ? (
               <Image
                 src={place.photo}
+                title={'Click to see the place on a map'}
+                style={{ cursor: 'pointer' }}
                 alt={`${place.name}`}
                 onClick={() => onClick(place.id)}
+                onLoad={e => handleImgLoad(e, place.id)}
               />
             ) : (
                 <Map
                   width="auto"
-                  height={120}
+                  height={place.dimensions && place.dimensions.height ? place.dimensions.height : 120}
                   center={[place.longitude, place.latitude]}
                   zoom={1}
                 >
@@ -48,6 +65,15 @@ const Places = ({ places, setPlaces }) => {
                   >
                     <Pin onClick={() => onClick(place.id)}></Pin>
                   </Marker>
+                  <Popup
+                    anchor="top"
+                    longitude={place.longitude}
+                    latitude={place.latitude}
+                    closeButton={false}
+                    closeOnClick={false}
+                  >
+                    <div>Click to see an image of the place</div>
+                  </Popup>
                 </Map>
               )}
           </GridColumn>
