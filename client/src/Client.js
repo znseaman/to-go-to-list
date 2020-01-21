@@ -6,6 +6,9 @@ class Client {
     this.token = sessionStorage.getItem('token');
     this.expiresIn = sessionStorage.getItem('expiresIn');
 
+    const { REACT_APP_MAPBOX_ACCESS_TOKEN: ACCESS_TOKEN } = process.env;
+    this.mapbox_access_token = ACCESS_TOKEN;
+
     if (this.expiresIn) {
       this.setAutoLogout();
     }
@@ -71,6 +74,10 @@ class Client {
     return axios.get('http://localhost:3000/api/place/all', {
       headers: { 'Authorization': `Bearer ${this.token}` }
     }).then(res => res.data);
+  }
+
+  searchPlaceName(text) {
+    return axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json?access_token=${this.mapbox_access_token}`).then(res => res.data);
   }
 }
 
