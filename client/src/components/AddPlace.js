@@ -93,6 +93,7 @@ const AddPlaceForm = ({ places, setPlaces }) => {
         <div className="field">
           <label>Name</label>
           <Search
+            icon=""
             loading={formData.isLoading}
             onResultSelect={onResultSelect}
             onSearchChange={_.throttle(handleSearchChange, 1000, {
