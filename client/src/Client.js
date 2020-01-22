@@ -1,90 +1,70 @@
 import axios from 'axios';
+import axiosConfig from './shared/axios';
+
+const getItem = sessionStorage.getItem.bind(sessionStorage);
+const setItem = sessionStorage.setItem.bind(sessionStorage);
+const removeItem = sessionStorage.removeItem.bind(sessionStorage);
+
+const setAutoLogout = expiresIn => {
+  // convert expiresIn seconds to milliseconds
+  const timeLeft = (Number(expiresIn) * 1000) - Date.now();
+  if (getItem('token')) {
+    setTimeout(() => {
+      removeItem('token');
+      window.location.reload();
+    }, timeLeft)
+  }
+};
+
+const getTimeLeft = expiresIn => (Number(expiresIn) * 1000) - Date.now()
 
 class Client {
   constructor() {
-    this.localhost = process.env.NODE_ENV == 'development' ? 'http://localhost:5000' : '';
-    this.user = sessionStorage.getItem('user');
-    this.token = sessionStorage.getItem('token');
-    this.expiresIn = sessionStorage.getItem('expiresIn');
+    this.user = getItem('user');
+    this.removeItem = removeItem;
 
     const { REACT_APP_MAPBOX_ACCESS_TOKEN: ACCESS_TOKEN } = process.env;
     this.mapbox_access_token = ACCESS_TOKEN;
 
-    if (this.expiresIn) {
-      this.setAutoLogout();
+    const expiresIn = getItem('expiresIn');
+    if (expiresIn) {
+      setAutoLogout(expiresIn);
     }
   }
 
-  isSignedIn() {
-    return !!this.token;
-  }
-
-  setItem(key, value) {
-    this[key] = value;
-    sessionStorage.setItem(key, value);
-  }
-
-  removeItem(key) {
-    this[key] = sessionStorage.removeItem(key);
-  }
+  isSignedIn = () => !!getItem('token')
 
   authenticate = (route, { email, password }) => (
-    axios.post(`${this.localhost}${route}`, { email, password })
-      .then(res => res.data)
+    axiosConfig.post(`${route}`, { email, password })
       .then(({ user, token, expiresIn }) => {
-        this.setItem('user', user);
-        this.setItem('token', token);
-        this.setItem('expiresIn', expiresIn);
-        this.setAutoLogout();
+        this.user = user;
+        // this.expiresIn = expiresIn;
+        setItem('user', user);
+        setItem('token', token);
+        setItem('expiresIn', expiresIn);
+        setAutoLogout(expiresIn);
       })
   )
 
-  signOut() {
-    this.removeItems(['token', 'user', 'expiresIn']);
-  }
-
-  removeItems(items) {
-    for (let item of items) {
-      this.removeItem(item);
+  setAutoLogout = expiresIn => {
+    // convert expiresIn seconds to milliseconds
+    const timeLeft = getTimeLeft(expiresIn);
+    if (getItem('token')) {
+      setTimeout(() => {
+        removeItem('token');
+        window.location.reload();
+      }, timeLeft)
     }
   }
 
-  reloadPage() {
-    window.location.reload();
-  }
+  getPlaces = () => axiosConfig.get(`/api/place/all`)
 
-  setAutoLogout() {
-    // convert expiresIn seconds to milliseconds
-    const timeLeft = (Number(this.expiresIn) * 1000) - Date.now();
-    setTimeout(() => {
-      this.signOut();
-      this.reloadPage();
-    }, timeLeft)
-  }
+  createPlace = body => axiosConfig.post(`/api/place`, body)
 
-  createPlace(body) {
-    return axios.post(`${this.localhost}/api/place`, body, { headers: { 'Authorization': `Bearer ${this.token}` } }).then(res => res.data)
-  }
+  deletePlace = id => axiosConfig.delete(`/api/place/${id}`)
 
-  deletePlace(id) {
-    return axios.delete(`${this.localhost}/api/place/${id}`, { headers: { 'Authorization': `Bearer ${this.token}` } })
-      .then(res => res.data)
-  }
-
-  getPlaces() {
-    return axios.get(`${this.localhost}/api/place/all`, {
-      headers: { 'Authorization': `Bearer ${this.token}` }
-    }).then(res => res.data).catch(err => {
-      if (err.response.status == 401) {
-        this.signOut();
-        this.reloadPage();
-      }
-    })
-  }
-
-  searchPlaceName(text) {
-    return axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json?access_token=${this.mapbox_access_token}`).then(res => res.data);
-  }
+  searchPlaceName = text => axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json?access_token=${this.mapbox_access_token}`)
+    .then(res => res.data);
 }
 
 export const client = new Client();

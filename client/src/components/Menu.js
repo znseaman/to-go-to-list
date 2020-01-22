@@ -32,7 +32,7 @@ function MenuComponent() {
             Settings
           </MenuItem>} */}
           {client.isSignedIn() && <MenuItem as={Link} to={'/'} onClick={() => {
-            client.signOut();
+            client.removeItem('token');
             return <Redirect to="/" />;
           }}>
             Sign Out
