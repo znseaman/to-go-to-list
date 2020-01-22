@@ -28,7 +28,7 @@ class Client {
     }
   }
 
-  getPlaces = () => axiosConfig.get(`/api/place/all`)
+  getPlaces = () => axiosConfig.get(`/api/place/all?order=DESC&orderBy=createdAt`)
 
   createPlace = body => axiosConfig.post(`/api/place`, body)
 

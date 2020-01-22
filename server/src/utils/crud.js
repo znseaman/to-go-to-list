@@ -16,11 +16,17 @@ export const getOne = model => async (req, res) => {
 }
 
 export const getMany = model => async (req, res) => {
+  var order;
+  if (req.query.order && req.query.orderBy) {
+    order = [[req.query.orderBy, req.query.order]]
+  }
+
   try {
     const rows = await model.findAll({
       where: {
         userId: req.user.id
-      }
+      },
+      order
     });
     return res.status(200).json({ data: rows });
   } catch (error) {
