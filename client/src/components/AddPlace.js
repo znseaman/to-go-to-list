@@ -3,6 +3,8 @@ import { Form, Button, FormField, Search } from "semantic-ui-react";
 import _ from "lodash";
 import { client } from "../Client";
 
+const { REACT_APP_MAPBOX_ACCESS_TOKEN: ACCESS_TOKEN } = process.env;
+
 const AddPlaceForm = ({ places, setPlaces }) => {
   /* @TODO: try using lens & only 1 object for the form in useState */
   const initialFormData = {
@@ -69,7 +71,7 @@ const AddPlaceForm = ({ places, setPlaces }) => {
       return false;
     }
 
-    const source = await client.searchPlaceName(value);
+    const source = await client.searchPlaceName(ACCESS_TOKEN)(value);
 
     // add `key` for React
     // add `title` for output in the list

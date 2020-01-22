@@ -5,20 +5,17 @@ import { getTimeLeft } from './shared/utility';
 
 class Client {
   constructor() {
-    const { REACT_APP_MAPBOX_ACCESS_TOKEN: ACCESS_TOKEN } = process.env;
-    this.mapbox_access_token = ACCESS_TOKEN;
-
-    setAutoLogout(getTimeLeft(getItem('expiresIn') || 0));
+    this.setAutoLogout(getTimeLeft(getItem('expiresIn') || 0));
   }
 
   isSignedIn = () => !!getItem('token')
 
-  authenticate = (route, { email, password }) => (
+  authenticate = route => ({ email, password }) => (
     axiosConfig.post(`${route}`, { email, password })
       .then(({ token, expiresIn }) => {
         setItem('token', token);
         setItem('expiresIn', expiresIn);
-        setAutoLogout(getTimeLeft(expiresIn));
+        this.setAutoLogout(getTimeLeft(expiresIn));
       })
   )
 
@@ -37,7 +34,7 @@ class Client {
 
   deletePlace = id => axiosConfig.delete(`/api/place/${id}`)
 
-  searchPlaceName = text => axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json?access_token=${this.mapbox_access_token}`)
+  searchPlaceName = ACCESS_TOKEN => text => axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json?access_token=${ACCESS_TOKEN}`)
     .then(res => res.data);
 }
 
