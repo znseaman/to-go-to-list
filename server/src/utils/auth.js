@@ -32,7 +32,7 @@ export const signIn = async (req, res, next) => {
   const user = await User.findOne({ where: { email } });
   req.user = user;
   if (!user) {
-    return res.status(401).send({ message: 'user must be real' })
+    return res.status(400).send({ message: 'user must be real' })
   }
 
   // check password
@@ -40,7 +40,7 @@ export const signIn = async (req, res, next) => {
     await user.checkPassword(password);
   } catch (e) {
     console.error(e);
-    return res.status(401).send({ message: 'not auth' })
+    return res.status(400).send({ message: 'not auth' })
   }
 
   next();

@@ -74,7 +74,12 @@ class Client {
   getPlaces() {
     return axios.get(`${this.localhost}/api/place/all`, {
       headers: { 'Authorization': `Bearer ${this.token}` }
-    }).then(res => res.data);
+    }).then(res => res.data).catch(err => {
+      if (err.response.status == 401) {
+        this.signOut();
+        this.reloadPage();
+      }
+    })
   }
 
   searchPlaceName(text) {
