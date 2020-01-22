@@ -54,13 +54,11 @@ class Client {
   }
 
   setAutoLogout() {
-    console.log(`within setAutoLogout`)
     // convert expiresIn seconds to milliseconds
     const timeLeft = (Number(this.expiresIn) * 1000) - Date.now();
     setTimeout(() => {
-      console.log(`within setTimeout about to log out`)
-      // this.signOut();
-      // this.reloadPage();
+      this.signOut();
+      this.reloadPage();
     }, timeLeft)
   }
 
