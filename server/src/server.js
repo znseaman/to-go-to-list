@@ -27,13 +27,10 @@ app.use('/api/user', protect, userRouter);
 app.use('/api/place', protect, placeRouter);
 
 if (process.env.NODE_ENV == 'production') {
-  // app.use(express.static(path.resolve(__dirname, 'client', 'build')));
   const clientBuild = path.join(__dirname, '../../client/build');
-  console.log('clientBuild', clientBuild);
   app.use(express.static(clientBuild));
 
   app.get('*', (req, res) =>
-    // res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
     res.sendFile(path.join(__dirname, '../../client/build/index.html'))
   );
 }
