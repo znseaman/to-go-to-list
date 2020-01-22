@@ -21,3 +21,6 @@ export const checkValidity = (value, rules) => {
 
   return isValid;
 };
+
+// convert expiresIn seconds to milliseconds
+export const getTimeLeft = expiresIn => (Number(expiresIn) * 1000) - Date.now()

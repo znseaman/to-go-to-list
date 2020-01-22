@@ -67,5 +67,5 @@ export const sendToken = async (req, res) => {
   const { user } = req;
   const token = user.newToken(user);
   const payload = await User.verifyToken(token);
-  return res.status(201).send({ token, user, expiresIn: payload.exp });
+  return res.status(201).send({ token, expiresIn: payload.exp });
 }

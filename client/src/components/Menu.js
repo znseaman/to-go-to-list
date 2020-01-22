@@ -4,6 +4,7 @@ import { Link, Redirect, withRouter } from "react-router-dom";
 import { faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { client } from "../Client";
+import { removeItem } from '../shared/sessionStorage';
 
 function MenuComponent() {
   return (
@@ -32,7 +33,7 @@ function MenuComponent() {
             Settings
           </MenuItem>} */}
           {client.isSignedIn() && <MenuItem as={Link} to={'/'} onClick={() => {
-            client.removeItem('token');
+            removeItem('token');
             return <Redirect to="/" />;
           }}>
             Sign Out

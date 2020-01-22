@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getItem, removeItem } from './sessionStorage';
 const baseURL = process.env.NODE_ENV == 'development' ? process.env.REACT_APP_BASE_URL : '';
 
 const instance = axios.create({
@@ -7,7 +8,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(config => {
   if (config.url.match(/\/api\//)) {
-    const token = sessionStorage.getItem('token');
+    const token = getItem('token');
     config.headers.common['Authorization'] = `Bearer ${token}`;
   }
   return config;
@@ -16,9 +17,8 @@ instance.interceptors.request.use(config => {
 });
 
 instance.interceptors.response.use(res => res.data, error => {
-  console.log('error', error);
   if (error.response.status == 401) {
-    sessionStorage.removeItem('token');
+    removeItem('token');
     window.location.reload();
   }
   else if (error.response.status == 304) {

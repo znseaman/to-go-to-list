@@ -1,54 +1,28 @@
 import axios from 'axios';
 import axiosConfig from './shared/axios';
-
-const getItem = sessionStorage.getItem.bind(sessionStorage);
-const setItem = sessionStorage.setItem.bind(sessionStorage);
-const removeItem = sessionStorage.removeItem.bind(sessionStorage);
-
-const setAutoLogout = expiresIn => {
-  // convert expiresIn seconds to milliseconds
-  const timeLeft = (Number(expiresIn) * 1000) - Date.now();
-  if (getItem('token')) {
-    setTimeout(() => {
-      removeItem('token');
-      window.location.reload();
-    }, timeLeft)
-  }
-};
-
-const getTimeLeft = expiresIn => (Number(expiresIn) * 1000) - Date.now()
+import { getItem, setItem, removeItem } from './shared/sessionStorage';
+import { getTimeLeft } from './shared/utility';
 
 class Client {
   constructor() {
-    this.user = getItem('user');
-    this.removeItem = removeItem;
-
     const { REACT_APP_MAPBOX_ACCESS_TOKEN: ACCESS_TOKEN } = process.env;
     this.mapbox_access_token = ACCESS_TOKEN;
 
-    const expiresIn = getItem('expiresIn');
-    if (expiresIn) {
-      setAutoLogout(expiresIn);
-    }
+    setAutoLogout(getTimeLeft(getItem('expiresIn') || 0));
   }
 
   isSignedIn = () => !!getItem('token')
 
   authenticate = (route, { email, password }) => (
     axiosConfig.post(`${route}`, { email, password })
-      .then(({ user, token, expiresIn }) => {
-        this.user = user;
-        // this.expiresIn = expiresIn;
-        setItem('user', user);
+      .then(({ token, expiresIn }) => {
         setItem('token', token);
         setItem('expiresIn', expiresIn);
-        setAutoLogout(expiresIn);
+        setAutoLogout(getTimeLeft(expiresIn));
       })
   )
 
-  setAutoLogout = expiresIn => {
-    // convert expiresIn seconds to milliseconds
-    const timeLeft = getTimeLeft(expiresIn);
+  setAutoLogout = timeLeft => {
     if (getItem('token')) {
       setTimeout(() => {
         removeItem('token');
