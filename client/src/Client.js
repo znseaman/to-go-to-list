@@ -2,6 +2,7 @@ import axios from 'axios';
 
 class Client {
   constructor() {
+    this.localhost = process.env.NODE_ENV == 'development' ? 'http://localhost:5000' : '';
     this.user = sessionStorage.getItem('user');
     this.token = sessionStorage.getItem('token');
     this.expiresIn = sessionStorage.getItem('expiresIn');
@@ -28,7 +29,7 @@ class Client {
   }
 
   authenticate = (route, { email, password }) => (
-    axios.post(`http://localhost:3000${route}`, { email, password })
+    axios.post(`${this.localhost}${route}`, { email, password })
       .then(res => res.data)
       .then(({ user, token, expiresIn }) => {
         this.setItem('user', user);
@@ -53,25 +54,27 @@ class Client {
   }
 
   setAutoLogout() {
+    console.log(`within setAutoLogout`)
     // convert expiresIn seconds to milliseconds
     const timeLeft = (Number(this.expiresIn) * 1000) - Date.now();
     setTimeout(() => {
-      this.signOut();
-      this.reloadPage();
+      console.log(`within setTimeout about to log out`)
+      // this.signOut();
+      // this.reloadPage();
     }, timeLeft)
   }
 
   createPlace(body) {
-    return axios.post(`http://localhost:3000/api/place`, body, { headers: { 'Authorization': `Bearer ${this.token}` } }).then(res => res.data)
+    return axios.post(`${this.localhost}/api/place`, body, { headers: { 'Authorization': `Bearer ${this.token}` } }).then(res => res.data)
   }
 
   deletePlace(id) {
-    return axios.delete(`http://localhost:3000/api/place/${id}`, { headers: { 'Authorization': `Bearer ${this.token}` } })
+    return axios.delete(`${this.localhost}/api/place/${id}`, { headers: { 'Authorization': `Bearer ${this.token}` } })
       .then(res => res.data)
   }
 
   getPlaces() {
-    return axios.get('http://localhost:3000/api/place/all', {
+    return axios.get(`${this.localhost}/api/place/all`, {
       headers: { 'Authorization': `Bearer ${this.token}` }
     }).then(res => res.data);
   }

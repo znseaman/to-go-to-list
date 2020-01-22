@@ -39,7 +39,7 @@ const Places = ({ places, setPlaces }) => {
 
   return (
     <Grid celled>
-      {places.length > 0 && places.map(place => (
+      {places && places.length > 0 && places.map(place => (
         <GridRow key={place.id}>
           <GridColumn width={6}>
             {place.hasImage ? (

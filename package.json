@@ -1,0 +1,28 @@
+{
+  "name": "to-go-to-list",
+  "version": "1.0.0",
+  "description": "To Go To list application",
+  "main": "server/dist/index.js",
+  "engines": {
+    "node": "12.14.0"
+  },
+  "scripts": {
+    "server_install": "yarn --cwd ./server",
+    "server_start": "yarn --cwd ./server start",
+    "server_build": "NODE_ENV=production yarn --cwd ./server build",
+    "server_dev": "yarn --cwd ./server dev",
+    "client_install": "yarn --cwd ./client",
+    "client_start": "yarn --cwd ./client start",
+    "client_build": "yarn --cwd ./client build",
+    "dev": "concurrently \"yarn server_dev\" \"yarn client_start\"",
+    "start": "yarn server_start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^5.0.2",
+    "dotenv": "^8.2.0"
+  }
+}

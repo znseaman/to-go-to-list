@@ -12,7 +12,7 @@ const User = sequelize.define('user', {
     primaryKey: true
   },
   email: Sequelize.STRING,
-  password: Sequelize.STRING
+  password: Sequelize.STRING,
 }, {
   hooks: {
     beforeCreate: async (user, options) => {
@@ -27,8 +27,8 @@ User.prototype.toJSON = function () {
   var values = Object.assign({}, this.get());
 
   delete values.password;
-  delete values.createdAt;
-  delete values.updatedAt;
+  // delete values.createdAt;
+  // delete values.updatedAt;
   return values;
 }
 

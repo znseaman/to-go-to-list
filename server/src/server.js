@@ -2,7 +2,9 @@ import express from 'express';
 import config from './config';
 import cors from 'cors';
 import morgan from 'morgan';
-import sequelize from './utils/db'
+import path from 'path';
+import 'dotenv/config';
+import sequelize from './utils/db';
 import { protect, createAccount, signIn, sendToken } from './utils/auth';
 import Place from './resources/place/place.model';
 import User from './resources/user/user.model';
@@ -24,6 +26,22 @@ app.post('/signin', signIn, sendToken);
 app.use('/api/user', protect, userRouter);
 app.use('/api/place', protect, placeRouter);
 
+if (process.env.NODE_ENV == 'production') {
+  // app.use(express.static(path.resolve(__dirname, 'client', 'build')));
+  const clientBuild = path.join(__dirname, '../../client/build');
+  console.log('clientBuild', clientBuild);
+  app.use(express.static(clientBuild));
+
+  app.get('*', (req, res) =>
+    // res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    res.sendFile(path.join(__dirname, '../../client/build/index.html'))
+  );
+}
+
+process.on('unhandledRejection', error => {
+  // Will print "unhandledRejection err is not defined"
+  console.log('unhandledRejection', error.message);
+});
 
 export const start = async () => {
   try {
