@@ -3,7 +3,7 @@ import config from './config';
 import cors from 'cors';
 import morgan from 'morgan';
 import path from 'path';
-import 'dotenv/config';
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 import sequelize from './utils/db';
 import { protect, createAccount, signIn, sendToken } from './utils/auth';
 import Place from './resources/place/place.model';
