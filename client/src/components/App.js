@@ -9,6 +9,7 @@ import Menu from "./Menu";
 import Home from "./Home";
 import AuthForm from "./AuthForm";
 import PrivateRoute from "./PrivateRoute";
+const { REACT_APP_BASE_URL: baseURL } = process.env;
 
 function App() {
   return (
@@ -16,9 +17,9 @@ function App() {
       <Menu />
       <Container>
         <Switch>
-          <PrivateRoute path="/" exact component={Home} />
-          <Route path="/signin" component={AuthForm} />
-          <Route path="/create_account" component={AuthForm} />
+          <PrivateRoute path={`${baseURL}/`} exact component={Home} />
+          <Route path={`${baseURL}/signin`} component={AuthForm} />
+          <Route path={`${baseURL}/create_account`} component={AuthForm} />
         </Switch>
       </Container>
     </Router>

@@ -32,9 +32,10 @@ const AuthForm = () => {
   const [emailValid, setEmailValid] = React.useState(false);
   const [confirmLabel, setConfirmLabel] = React.useState('hidden');
   const [confirmValid, setConfirmValid] = React.useState(false);
+  const { REACT_APP_BASE_URL: baseURL } = process.env;
 
-  const signInRoute = "/signin";
-  const createAccountRoute = "/create_account";
+  const signInRoute = `${baseURL}/signin`;
+  const createAccountRoute = `${baseURL}/create_account`;
   const hasAccount = useRouteMatch(signInRoute);
   const authRoute = hasAccount ? signInRoute : createAccountRoute;
   const submit = client.authenticate(authRoute);
@@ -95,7 +96,7 @@ const AuthForm = () => {
   }
 
   if (formState.shouldRedirect) {
-    return <Redirect to="/" />;
+    return <Redirect to={`${baseURL}/`} />;
   }
 
   return <Grid centered columns={2}>

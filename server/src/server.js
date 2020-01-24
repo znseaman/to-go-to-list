@@ -12,6 +12,8 @@ import placeRouter from './resources/place/place.router';
 import userRouter from './resources/user/user.router';
 
 export const app = express();
+const { REACT_APP_BASE_URL: baseURL } = process.env;
+
 
 app.disable('x-powered-by');
 
@@ -20,16 +22,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.post('/create_account', createAccount, sendToken);
-app.post('/signin', signIn, sendToken);
-app.use('/api/user', protect, userRouter);
-app.use('/api/place', protect, placeRouter);
+app.post(`${baseURL}/create_account`, createAccount, sendToken);
+app.post(`${baseURL}/signin`, signIn, sendToken);
+app.use(`${baseURL}/api/user`, protect, userRouter);
+app.use(`${baseURL}/api/place`, protect, placeRouter);
 
 if (process.env.NODE_ENV == 'production') {
   const clientBuild = path.join(__dirname, '../../client/build');
   app.use(express.static(clientBuild));
 
-  app.get('*', (req, res) =>
+  app.get(`${baseURL}/*`, (req, res) =>
     res.sendFile(path.join(__dirname, '../../client/build/index.html'))
   );
 }
