@@ -2,6 +2,7 @@ import axios from 'axios';
 import axiosConfig from './shared/axios';
 import { getItem, setItem, removeItem } from './shared/sessionStorage';
 import { getTimeLeft } from './shared/utility';
+const { REACT_APP_BASE_URL: baseURL } = process.env;
 
 class Client {
   constructor() {
@@ -11,7 +12,7 @@ class Client {
   isSignedIn = () => !!getItem('token')
 
   authenticate = route => ({ email, password }) => (
-    axiosConfig.post(`${route}`, { email, password })
+    axiosConfig.post(`${baseURL}${route}`, { email, password })
       .then(({ token, expiresIn }) => {
         setItem('token', token);
         setItem('expiresIn', expiresIn);
@@ -28,11 +29,11 @@ class Client {
     }
   }
 
-  getPlaces = () => axiosConfig.get(`/api/place/all?order=DESC&orderBy=createdAt`)
+  getPlaces = () => axiosConfig.get(`${baseURL}/api/place/all?order=DESC&orderBy=createdAt`)
 
-  createPlace = body => axiosConfig.post(`/api/place`, body)
+  createPlace = body => axiosConfig.post(`${baseURL}/api/place`, body)
 
-  deletePlace = id => axiosConfig.delete(`/api/place/${id}`)
+  deletePlace = id => axiosConfig.delete(`${baseURL}/api/place/${id}`)
 
   searchPlaceName = ACCESS_TOKEN => text => axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${text}.json?access_token=${ACCESS_TOKEN}`)
     .then(res => res.data);

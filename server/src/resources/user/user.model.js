@@ -1,6 +1,5 @@
 import Sequelize from 'sequelize';
 import sequelize from '../../utils/db';
-import secrets from './user.secrets';
 import bcrypt from 'bcrypt';
 import { newToken, verifyToken, getTokenFromRequest } from '../../utils/token';
 
@@ -47,17 +46,5 @@ User.prototype.newToken = newToken;
 /* Static Methods */
 User.verifyToken = verifyToken;
 User.getTokenFromRequest = getTokenFromRequest;
-
-// User.sync({ force: true }).then(async () => {
-//   console.log('In User.sync ....')
-//   // Table created
-//   return await User.create({
-//     email: 'znseaman@gmail.com',
-//     password: 'password'
-//   });
-//   // User.create(secrets).then(user => {
-//   //   console.log(user.get())
-//   // })
-// });
 
 export default User;
