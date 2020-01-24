@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "To Go To list application",
   "main": "server/dist/index.js",
-  "engines": {
-    "node": "12.14.0"
-  },
   "scripts": {
     "server_install": "yarn --cwd ./server",
     "server_start": "yarn --cwd ./server start",
