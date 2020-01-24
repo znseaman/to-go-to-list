@@ -15,7 +15,8 @@
     "client_start": "yarn --cwd ./client start",
     "client_build": "yarn --cwd ./client build",
     "dev": "concurrently \"yarn server_dev\" \"yarn client_start\"",
-    "start": "yarn server_start"
+    "start": "yarn server_start",
+    "build": "yarn server_install && yarn client_install && yarn server_build && yarn client_build"
   },
   "keywords": [],
   "author": "",

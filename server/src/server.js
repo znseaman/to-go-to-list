@@ -53,7 +53,7 @@ export const start = async () => {
         console.log('Unable to connect to the database:', err);
       });
 
-    // await sequelize.sync();
+    await sequelize.sync();
     // await sequelize.sync({ force: true });
     // let user = await User.findByPk(1);
     // console.log("user", user);
