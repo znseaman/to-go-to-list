@@ -8,7 +8,6 @@ import sequelize from './utils/db';
 import { protect, createAccount, signIn, sendToken } from './utils/auth';
 import Place from './resources/place/place.model';
 import User from './resources/user/user.model';
-import secrets from './resources/user/user.secrets';
 import placeRouter from './resources/place/place.router';
 import userRouter from './resources/user/user.router';
 
@@ -54,14 +53,6 @@ export const start = async () => {
       });
 
     await sequelize.sync();
-    // await sequelize.sync({ force: true });
-    // let user = await User.findByPk(1);
-    // console.log("user", user);
-    // if (!user) {
-    //   user = await User.create(secrets).then(u => {
-    //     console.log(u)
-    //   }).catch(error => console.error(error))
-    // }
 
     await app.listen(config.port, () => {
       console.log(`Server running on ${config.port}...`);
