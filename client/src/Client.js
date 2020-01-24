@@ -2,7 +2,6 @@ import axios from 'axios';
 import axiosConfig from './shared/axios';
 import { getItem, setItem, removeItem } from './shared/sessionStorage';
 import { getTimeLeft } from './shared/utility';
-const { REACT_APP_BASE_URL: baseURL } = process.env;
 
 class Client {
   constructor() {

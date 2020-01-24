@@ -12,8 +12,6 @@ import placeRouter from './resources/place/place.router';
 import userRouter from './resources/user/user.router';
 
 export const app = express();
-const { REACT_APP_BASE_URL: baseURL } = process.env;
-
 
 app.disable('x-powered-by');
 
