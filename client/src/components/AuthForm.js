@@ -34,9 +34,9 @@ const AuthForm = () => {
   const [confirmValid, setConfirmValid] = React.useState(false);
   const { REACT_APP_BASE_URL: baseURL } = process.env;
 
-  const signInRoute = `${baseURL}/signin`;
-  const createAccountRoute = `${baseURL}/create_account`;
-  const hasAccount = useRouteMatch(signInRoute);
+  const signInRoute = `/signin`;
+  const createAccountRoute = `/create_account`;
+  const hasAccount = useRouteMatch(`${baseURL}${signInRoute}`);
   const authRoute = hasAccount ? signInRoute : createAccountRoute;
   const submit = client.authenticate(authRoute);
   const CREATE = 'Create Account';
