@@ -70,23 +70,27 @@ const AddPlaceForm = ({ places, setPlaces }) => {
       setFormData({ ...formData, isLoading: false, name: value });
       return false;
     }
+    
+    try {
+      const source = await client.searchPlaceName(ACCESS_TOKEN)(value);
 
-    const source = await client.searchPlaceName(ACCESS_TOKEN)(value);
+      // add `key` for React
+      // add `title` for output in the list
+      source.features = source.features.map((f, i) => {
+        f.key = i;
+        f.title = f.place_name;
+        return f;
+      });
 
-    // add `key` for React
-    // add `title` for output in the list
-    source.features = await source.features.map((f, i) => {
-      f.key = i;
-      f.title = f.place_name;
-      return f;
-    });
-
-    await setFormData({
-      ...formData,
-      name: value,
-      isLoading: false,
-      results: [...source.features, { key: 9999, title: 'Powered by Mapbox', clickable: '' }],
-    });
+      setFormData({
+        ...formData,
+        name: value,
+        isLoading: false,
+        results: [...source.features, { key: 9999, title: 'Powered by Mapbox', clickable: '' }],
+      });
+    } catch (error) {
+      setFormData({ ...formData, isLoading: false, name: value });
+    }
   }
 
   return (
