@@ -8,7 +8,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
     client.isSignedIn() ? (
       React.createElement(Component, props)
     ) : (
-        <Redirect to={`${baseURL}/signin` />
+        <Redirect to={`${baseURL}/signin`} />
       )
   )} />
 );
