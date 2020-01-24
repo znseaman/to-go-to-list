@@ -4,7 +4,7 @@ import { Link, Redirect, withRouter } from "react-router-dom";
 import { faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { client } from "../Client";
-import { removeItem } from `../shared/sessionStorage`;
+import { removeItem } from "../shared/sessionStorage";
 const { REACT_APP_BASE_URL: baseURL } = process.env;
 
 function MenuComponent() {
