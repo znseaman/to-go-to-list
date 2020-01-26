@@ -50,13 +50,13 @@ const AuthForm = () => {
     // basic login validation
     if (!hasAccount) {
       // create account validation
-      if (password.length < 0 || confirmPassword.length < 0 || password != confirmPassword || email.length < 0) {
+      if (password.length == 0 || confirmPassword.length == 0 || password != confirmPassword || email.length == 0) {
         setFormState({ ...formState, loginInProgress: false });
         return false;
       }
     } else if (hasAccount) {
       // sign in validation
-      if (email.length < 0 && password.length < 0) {
+      if (email.length == 0 && password.length == 0) {
         setFormState({ ...formState, loginInProgress: false });
         return false;
       }
