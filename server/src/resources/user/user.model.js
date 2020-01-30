@@ -10,8 +10,19 @@ const User = sequelize.define('user', {
     allowNull: false,
     primaryKey: true
   },
-  email: Sequelize.STRING,
-  password: Sequelize.STRING,
+  email: {
+    type: Sequelize.STRING,
+    validate: {
+      isEmail: true,
+      max: 254
+    }
+  },
+  password: {
+    type: Sequelize.STRING,
+    validate: {
+      max: 99
+    }
+  },
 }, {
   hooks: {
     beforeCreate: async (user, options) => {

@@ -118,6 +118,7 @@ const AuthForm = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               required
+              maxLength={254}
               error={emailValid}
             ></Input>
             <Label pointing prompt className={emailLabel}>
@@ -133,6 +134,7 @@ const AuthForm = () => {
               type="password"
               name="password"
               onChange={handleChange}
+              maxLength={99}
               required
             ></Input>
             <Label pointing prompt className="hidden">
@@ -152,6 +154,7 @@ const AuthForm = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 required
+                maxLength={99}
                 error={confirmValid}
               ></Input>
               <Label pointing prompt className={confirmLabel}>
