@@ -9,7 +9,8 @@ import Menu from "./Menu";
 import Home from "./Home";
 import AuthForm from "./AuthForm";
 import PrivateRoute from "./PrivateRoute";
-const { REACT_APP_BASE_URL: baseURL } = process.env;
+import config from '../config';
+let { CLIENT_URL: baseURL } = config;
 
 function App() {
   return (

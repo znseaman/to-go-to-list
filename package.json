@@ -10,7 +10,7 @@
     "server_dev": "yarn --cwd ./server dev",
     "client_install": "yarn --cwd ./client",
     "client_start": "yarn --cwd ./client start",
-    "client_build": "yarn --cwd ./client build",
+    "client_build": "NODE_ENV=production yarn --cwd ./client build",
     "dev": "concurrently \"yarn server_dev\" \"yarn client_start\"",
     "start": "yarn server_start",
     "build": "yarn server_install && yarn client_install && yarn server_build && yarn client_build"

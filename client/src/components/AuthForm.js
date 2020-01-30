@@ -13,6 +13,8 @@ import {
 } from "semantic-ui-react";
 import { client } from "../Client";
 import { checkValidity } from "../shared/utility";
+import config from "../config";
+const { CLIENT_URL: baseURL } = config;
 
 const AuthForm = () => {
   const [formState, setFormState] = React.useState({
@@ -32,7 +34,6 @@ const AuthForm = () => {
   const [emailValid, setEmailValid] = React.useState(false);
   const [confirmLabel, setConfirmLabel] = React.useState('hidden');
   const [confirmValid, setConfirmValid] = React.useState(false);
-  const { REACT_APP_BASE_URL: baseURL } = process.env;
 
   const signInRoute = `/signin`;
   const createAccountRoute = `/create_account`;

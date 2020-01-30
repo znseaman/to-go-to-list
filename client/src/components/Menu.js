@@ -5,7 +5,8 @@ import { faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { client } from "../Client";
 import { removeItem } from "../shared/sessionStorage";
-const { REACT_APP_BASE_URL: baseURL } = process.env;
+import config from "../config";
+let { CLIENT_URL: baseURL } = config;
 
 function MenuComponent() {
   return (

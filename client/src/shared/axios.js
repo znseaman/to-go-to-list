@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { getItem, removeItem } from './sessionStorage';
-const baseURL = process.env.REACT_APP_BASE_URL;
+import config from '../config';
+const { SERVER_URL: baseURL } = config;
 
 const instance = axios.create({
   baseURL,
