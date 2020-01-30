@@ -1,8 +1,8 @@
-const CLIENT_URL = process.env.PUBLIC_URL;
+const { PUBLIC_URL } = process.env;
 
 const config = {
-  CLIENT_URL,
-  SERVER_URL: '',
+  CLIENT_URL: PUBLIC_URL,
+  SERVER_URL: PUBLIC_URL,
 }
 
 export default {
