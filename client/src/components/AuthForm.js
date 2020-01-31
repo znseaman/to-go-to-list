@@ -174,7 +174,7 @@ const AuthForm = () => {
       }
       <Message>
         {hasAccount ? 'Not registered yet?' : 'Already registered?'}{' '}
-        <Link to={hasAccount ? createAccountRoute : signInRoute}>
+        <Link to={hasAccount ? `${baseURL}${createAccountRoute}` : `${baseURL}${signInRoute}`}>
           {hasAccount ? CREATE : SIGN}
         </Link>
       </Message>
